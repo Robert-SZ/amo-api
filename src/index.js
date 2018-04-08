@@ -2,13 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const router = express.Router();
+const config = require('./config');
 
 router.use(function (req, res, next) {
     res.header('protocol', '0.2');
     next();
 });
 
-const port = 8005;
+const port = config.port;
 app.use(bodyParser.json({extended: true}));
 app.use('/', router);
 
