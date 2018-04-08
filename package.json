@@ -1,0 +1,24 @@
+{
+  "name": "amo-crm-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^22.0.5",
+    "nodemon": "^1.12.1"
+  },
+  "dependencies": {
+    "apiapi": "^1.7.1",
+    "assert": "^1.4.1",
+    "axios": "^0.17.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongodb": "^3.0.5",
+    "mongodb-queue": "^3.1.0"
+  }
+}
