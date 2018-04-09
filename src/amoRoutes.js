@@ -125,7 +125,7 @@ module.exports = function (app) {
                     }
 
                     function getReferer(utmSource) {
-                        switch (utmSource){
+                        switch (utmSource) {
                             case '(pap)':
                                 return 'Агенты modul.club';
                             default:
@@ -134,9 +134,10 @@ module.exports = function (app) {
                     }
 
                     function addLead(data) {
+                        let name = data.name || 'Без Имени';
                         return amo.createLead(
                             {
-                                name: `Заказ от ${data.name}`,
+                                name: `Заказ от ${name}`,
                                 custom_fields: [
                                     getField(110947, getReferer(data.utmSource)),//Ресурс
                                     getField(111005, data.utmSource),//utm_source
@@ -146,7 +147,7 @@ module.exports = function (app) {
                                 amoQueue.add({
                                     type: 'contact',
                                     payload: {
-                                        name: data.name,
+                                        name: name,
                                         phone: data.phone,
                                         email: data.email,
                                         leadId: lead.id
