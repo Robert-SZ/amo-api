@@ -88,7 +88,7 @@ module.exports = function (app) {
                             }
                             return {error}
                         }).then((data) => {
-                            if (data && data.response.auth) {
+                            if (data && data.response && data.response.auth) {
                                 needAuth = false;
                             }
                         }).then(() => {
@@ -124,12 +124,21 @@ module.exports = function (app) {
                         });
                     }
 
+                    function getReferer(utmSource) {
+                        switch (utmSource){
+                            case '(pap)':
+                                return 'Агенты modul.club';
+                            default:
+                                return 'Сайт modulkassa.ru';
+                        }
+                    }
+
                     function addLead(data) {
                         return amo.createLead(
                             {
                                 name: `Заказ от ${data.name}`,
                                 custom_fields: [
-                                    getField(110947, "Сайт modulkassa.ru"),//Ресурс
+                                    getField(110947, getReferer(data.utmSource)),//Ресурс
                                     getField(111005, data.utmSource),//utm_source
                                 ]
                             }).then((lead) => {
