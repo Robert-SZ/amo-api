@@ -85,7 +85,7 @@ function parseCreateLead(res) {
 }
 
 function parseCreateContact(res) {
-    console.log('CreatedContact: ' + res);
+    console.log('CreatedContact: ' + JSON.stringify(res));
     assert(res.data._embedded.items.length && res.status === 200, 'Contact is not added due to some error');
     return res.data._embedded.items[0];
 }
