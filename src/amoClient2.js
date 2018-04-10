@@ -2,7 +2,7 @@ var assert = require('assert');
 var ApiClient = require('apiapi');
 var request = require('axios');
 
-var REQUEST_DELAY =1100;
+var REQUEST_DELAY = 1100;
 
 function delayedRequest() {
     var args = arguments;
@@ -79,12 +79,14 @@ function prepareCreateLead(params, requestBody, opts) {
 }
 
 function parseCreateLead(res) {
+    console.log('CreatedLead: ' + res);
     assert(res.data._embedded.items.length && res.status === 200, 'Lead is not added due to some error');
     return res.data._embedded.items[0];
 }
 
 function parseCreateContact(res) {
-    assert(res.data._embedded.items.length && res.status === 200, 'Lead is not added due to some error');
+    console.log('CreatedContact: ' + res);
+    assert(res.data._embedded.items.length && res.status === 200, 'Contact is not added due to some error');
     return res.data._embedded.items[0];
 }
 
