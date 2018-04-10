@@ -1,6 +1,7 @@
 var assert = require('assert');
 var ApiClient = require('apiapi');
 var request = require('axios');
+var fs = require('fs');
 
 var REQUEST_DELAY = 1100;
 
@@ -85,7 +86,10 @@ function parseCreateLead(res) {
 }
 
 function parseCreateContact(res) {
-    console.log('CreatedContact: ' + JSON.stringify(res));
+    console.log('CreatedContact: ' + res[0]);
+    console.log('CreatedContact: ' + res[1]);
+    console.log('CreatedContact: ' + res[2]);
+    console.log('CreatedContact: ' + res[3]);
     assert(res.data._embedded.items.length && res.status === 200, 'Contact is not added due to some error');
     return res.data._embedded.items[0];
 }
