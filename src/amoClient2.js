@@ -89,7 +89,7 @@ function parseCreateLead(res) {
 
 function parseCreateContact(res) {
     for (key in res) {
-        console.log('CreatedContact: ' + res[key]);
+        console.log('CreatedContact: ' +key+' '+ JSON.stringify(res[key]));
     }
     if (res) {
         assert(res.data._embedded.items.length && res.status === 200, 'Contact is not added due to some error');
