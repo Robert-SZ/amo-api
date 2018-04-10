@@ -27,8 +27,8 @@ module.exports = function buildClient(baseUrl) {
             getContactsList: 'get /api/v2/contacts/',
             createContact: 'post /api/v2/contacts',
             updateContact: 'post /api/v2/contacts',
-            updateCompany: 'post /api/v2/contacts',
-
+            updateCompany: 'post /api/v2/companies',
+            createCompany: 'post /api/v2/companies',
             createLead: 'post /api/v2/leads'
 
         },

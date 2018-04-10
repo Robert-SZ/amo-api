@@ -231,27 +231,31 @@ module.exports = function (app) {
                     function addCompany(data) {
                         if (!data.name)
                             return;
-                        //получить контакт
-                        return amo.getCompanyList({
-                            "query": data.phone
-                        }).then((companies) => {
-                            if (companies && companies.length) {
-                                let company = companies[0];
-                                let leadIds = company.leads.id || [];
-                                leadIds.push(data.leadId);
-                                let updated_at = new Date().getTime();
 
-                                return amo.updateCompany(
-                                    {
-                                        id: company.id,
-                                        updated_at: updated_at,
-                                        leads_id: leadIds
-                                    }
-                                );
-                            } else {
-                                return amo.createCompany(createCompany(data.name, data.leadId, data.inn, data.ogrn, data.rs, data.bik, data.address));
-                            }
-                        });
+                        return amo.createCompany(createCompany(data.name, data.leadId, data.inn, data.ogrn, data.rs, data.bik, data.address));
+
+                        // //получить контакт
+                        // return amo.getCompanyList({
+                        //     "name": data.name
+                        // }).then((companies) => {
+                        //
+                        //     if (companies && companies.length) {
+                        //         let company = companies[0];
+                        //         let leadIds = company.leads.id || [];
+                        //         leadIds.push(data.leadId);
+                        //         let updated_at = new Date().getTime();
+                        //
+                        //         return amo.updateCompany(
+                        //             {
+                        //                 id: company.id,
+                        //                 updated_at: updated_at,
+                        //                 leads_id: leadIds
+                        //             }
+                        //         );
+                        //     } else {
+                        //         return amo.createCompany(createCompany(data.name, data.leadId, data.inn, data.ogrn, data.rs, data.bik, data.address));
+                        //     }
+                        // });
                     }
 
                     amoAuthQueue.add('auth', function (err, id) {
