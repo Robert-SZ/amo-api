@@ -81,8 +81,10 @@ function prepareCreateLead(params, requestBody, opts) {
 
 function parseCreateLead(res) {
     console.log('CreatedLead: ' + JSON.stringify(res));
-    assert(res.data._embedded.items.length && res.status === 200, 'Lead is not added due to some error');
-    return res.data._embedded.items[0];
+    if (res) {
+        assert(res.data._embedded.items.length && res.status === 200, 'Lead is not added due to some error');
+        return res.data._embedded.items[0];
+    }
 }
 
 function parseCreateContact(res) {
@@ -90,8 +92,10 @@ function parseCreateContact(res) {
     console.log('CreatedContact: ' + res[1]);
     console.log('CreatedContact: ' + res[2]);
     console.log('CreatedContact: ' + res[3]);
-    assert(res.data._embedded.items.length && res.status === 200, 'Contact is not added due to some error');
-    return res.data._embedded.items[0];
+    if (res) {
+        assert(res.data._embedded.items.length && res.status === 200, 'Contact is not added due to some error');
+        return res.data._embedded.items[0];
+    }
 }
 
 
