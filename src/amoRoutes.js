@@ -111,6 +111,7 @@ module.exports = function (app) {
                             productCode: req.body.productCode,
                             actionType: req.body.actionType,
                         };
+                        console.log('New lead: '+JSON.stringify(data));
 
                         amoQueue.add({type: 'lead', payload: data}, function (err, id) {
                             res.status(200).send({id});
@@ -161,6 +162,10 @@ module.exports = function (app) {
                     }
 
                     function addContact(data) {
+                        if(!data.name)
+                            return;
+                        if(!data.phone && !data.email)
+                            return;
                         //получить контакт
                         return amo.getContactsList({
                             "query": data.phone
