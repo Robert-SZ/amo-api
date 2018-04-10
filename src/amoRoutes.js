@@ -25,6 +25,20 @@ module.exports = function (app) {
         }
     }
 
+    function createCompany(name, leadId, inn, ogrn, rs, bik, address, address_delivery) {
+        return {
+            name: name,
+            linked_leads_id: leadId,
+            custom_fields: [
+                getEnumField(110875, inn),
+                getEnumField(110889, ogrn),
+                getEnumField(114287, bik),
+                getEnumField(114291, rs),
+                getEnumField(150105, address)
+            ]
+        }
+    }
+
     mongoClient.connect(mongodbConn, function (err, db) {
             if (err) throw err;
             let dbo = db.db("leadsDB");
@@ -68,6 +82,12 @@ module.exports = function (app) {
                                                     })
                                                 }));
                                                 break;
+                                            case 'company':
+                                                resolve(addCompany(msg.payload.payload).then(() => {
+                                                    amoQueue.ack(msg.ack, function (err, id) {
+                                                        console.log('Company Ack ' + JSON.stringify(msg.payload));
+                                                    })
+                                                }));
                                             default:
                                                 resolve();
                                         }
@@ -110,8 +130,19 @@ module.exports = function (app) {
                             city: req.body.city,
                             productCode: req.body.productCode,
                             actionType: req.body.actionType,
+                            company: {
+                                name: req.body.company,
+                                address: req.body.address,
+                                inn: req.body.inn,
+                                ogrn: req.body.ogrn,
+                                rs: req.body.rs,
+                                bik: req.body.bik_bank,
+                                address_delivery: req.body.address_delivery
+                            }
                         };
-                        console.log('New lead: '+JSON.stringify(data));
+                        console.log('New lead: ' + JSON.stringify(data));
+                        if (!data.name)
+                            return;
 
                         amoQueue.add({type: 'lead', payload: data}, function (err, id) {
                             res.status(200).send({id});
@@ -156,15 +187,23 @@ module.exports = function (app) {
                                 }, function (err, id) {
                                     console.log('Contact added to queue ' + id);
                                 });
+                                if (data.company) {
+                                    amoQueue.add({
+                                        type: 'company',
+                                        payload: Object.assign(data.company, {leadId: lead.id})
+                                    }, function (err, id) {
+                                        console.log('Company added to queue ' + id);
+                                    });
+                                }
                                 return lead;
                             }
                         });
                     }
 
                     function addContact(data) {
-                        if(!data.name)
+                        if (!data.name)
                             return;
-                        if(!data.phone && !data.email)
+                        if (!data.phone && !data.email)
                             return;
                         //получить контакт
                         return amo.getContactsList({
@@ -185,6 +224,32 @@ module.exports = function (app) {
                                 );
                             } else {
                                 return amo.createContact(createContact(data.name, data.phone, data.email, [data.leadId]));
+                            }
+                        });
+                    }
+
+                    function addCompany(data) {
+                        if (!data.name)
+                            return;
+                        //получить контакт
+                        return amo.getCompanyList({
+                            "query": data.phone
+                        }).then((companies) => {
+                            if (companies && companies.length) {
+                                let company = companies[0];
+                                let leadIds = company.leads.id || [];
+                                leadIds.push(data.leadId);
+                                let updated_at = new Date().getTime();
+
+                                return amo.updateCompany(
+                                    {
+                                        id: company.id,
+                                        updated_at: updated_at,
+                                        leads_id: leadIds
+                                    }
+                                );
+                            } else {
+                                return amo.createCompany(createCompany(data.name, data.leadId, data.inn, data.ogrn, data.rs, data.bik, data.address));
                             }
                         });
                     }

@@ -23,9 +23,11 @@ module.exports = function buildClient(baseUrl) {
         methods: {
             auth: 'post /private/api/auth.php?type=json',
 
+            getCompanyList: 'get /api/v2/companies',
             getContactsList: 'get /api/v2/contacts/',
             createContact: 'post /api/v2/contacts',
             updateContact: 'post /api/v2/contacts',
+            updateCompany: 'post /api/v2/contacts',
 
             createLead: 'post /api/v2/leads'
 
@@ -33,14 +35,18 @@ module.exports = function buildClient(baseUrl) {
 
         transformRequest: {
             createContact: prepareCreateContact,
+            createCompany: prepareCreateCompany,
             updateContact: prepareUpdateContact,
+            updateCompany: prepareUpdateCompany,
             createLead: prepareCreateLead
         },
         transformResponse: {
             auth: storeAuth,
             createLead: parseCreateLead,
             createContact: parseCreateContact,
-            getContactsList: parseGetContactsList
+            createCompany: parseCreateCompany,
+            getContactsList: parseGetContactsList,
+            getCompanyList: parseGetCompaniesList
         }
 
     });
@@ -64,12 +70,20 @@ module.exports = function buildClient(baseUrl) {
 };
 
 function prepareCreateContact(params, requestBody, opts) {
-
+    requestBody = {add: [params]};
+    return [params, requestBody, opts];
+}
+function prepareCreateCompany(params, requestBody, opts) {
     requestBody = {add: [params]};
     return [params, requestBody, opts];
 }
 
 function prepareUpdateContact(params, requestBody, opts) {
+    requestBody = {update: [params]};
+    return [params, requestBody, opts];
+}
+
+function prepareUpdateCompany(params, requestBody, opts) {
     requestBody = {update: [params]};
     return [params, requestBody, opts];
 }
@@ -93,7 +107,20 @@ function parseCreateContact(res) {
     //}
 }
 
+function parseCreateCompany(res) {
+    //if (res) {
+    //assert(res.data._embedded.items.length && res.status === 200, 'Contact is not added due to some error');
+    return res.data._embedded.items[0];
+    //}
+}
+
+
+
 
 function parseGetContactsList(res) {
+    return res.data._embedded && res.data._embedded.items;
+}
+
+function parseGetCompaniesList(res){
     return res.data._embedded && res.data._embedded.items;
 }
