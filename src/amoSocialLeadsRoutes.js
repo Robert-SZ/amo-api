@@ -25,13 +25,12 @@ module.exports = function (app) {
             email: email && email.answer,
             phone: phone && phone.answer,
             utmCampaign: undefined,
-            utmContent: undefined,
-            utmMedium: undefined,
+            utmContent: a_aid,
+            utmMedium: "cpm",
             utmSource: "vk",
             utmTerm: undefined,
             formName: formName,
-            comment: JSON.stringify(requestBody),
-            a_aid: a_aid
+            comment: JSON.stringify(requestBody)
         };
 
         return request.post('https://api.amocore.in/modulkassa/integration/modulkassa/ouvyse51de1vrzvzchnrnnhvqtheqt09', data)
