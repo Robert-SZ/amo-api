@@ -11,6 +11,7 @@ router.use(function (req, res, next) {
 
 const port = config.port;
 app.use(bodyParser.json({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', router);
 
 require('./routes')(app);

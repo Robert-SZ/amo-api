@@ -1,4 +1,6 @@
-const amoRoutes = require('./amoRoutes');
-module.exports = function(app) {
-    amoRoutes(app);
+// const amoRoutes = require('./amoRoutes');
+const amoSocialLeadsReoutes = require('./amoSocialLeadsRoutes');
+module.exports = function (app) {
+    // amoRoutes(app);
+    amoSocialLeadsReoutes(app);
 };
